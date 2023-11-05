@@ -52,9 +52,13 @@ body{
 
 /* A CSS hover effect takes place when a user hovers over
 an element, and the element responds with transition effects. */
-.btn:hover{
+.btn:hover:not([disabled]) {
     background: #001e4d;
     color: #fff;
+}
+
+.btn:disabled{
+    cursor: no-drop;
 }
 
 #next-btn{
@@ -65,8 +69,17 @@ an element, and the element responds with transition effects. */
     border: 0;
     padding: 10px;
     margin: 10px auto 0;
-    text-align: left;
+    text-align: middle;
     border-radius: 4px;
     cursor: pointer;
     display: none;
 }
+
+.correct{
+    background: #9aeabc;
+}
+
+.incorrect{
+    background: #ffcccb;
+}
+

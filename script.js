@@ -40,7 +40,7 @@ const questions = [
 
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
-const nextButton = document.getElementById("next-button");
+const nextButton = document.getElementById("next-btn");
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -63,6 +63,10 @@ function showQuestion() {
         button.innerHTML = answer.text;
         button.classList.add("btn");
         answerButtons.appendChild(button);
+        if (answer.correct) {
+            button.dataset.correct = answer.correct;
+        }
+        button.addEventListener("click", selectAnswer);
     });
 }
 
@@ -74,4 +78,53 @@ function resetState() {
         answerButtons.removeChild(answerButtons.firstChild);
     }
 }
+
+function selectAnswer(e) {
+    const selectedBtn = e.target;
+    const isCorrect = selectedBtn.dataset.correct === "true";
+    if (isCorrect) {
+       selectedBtn.classList.add("correct");
+       score++;
+    } else {
+        selectedBtn.classList.add("incorrect");
+    }
+
+    /*Convert the answerButtons children into an array using the Array.from() method.
+    Iterate over each button in the array using the forEach() method and an arrow function. */
+    Array.from(answerButtons.children).forEach(button => {
+        //Check if the button has a data-correct attribute with a value of "true".
+        if(button.dataset.correct === "true") {
+            //If the button is correct, it adds the "correct" class to the button using the classList.add() method
+            button.classList.add("correct");
+        }
+        button.disabled = true;
+    });
+    nextButton.style.display = "block";
+}
+
+function showScore(){
+    resetState();
+    questionElement.innerHTML = "Peli on päättynyt. Sait " + score + " pistettä.";
+    nextButton.innerHTML = "Pelaa uudestaan";
+    nextButton.style.display = "block";
+}
+
+function handleNextButton() {
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length) {
+        showQuestion();
+    } else {
+        showScore();
+    }
+
+}
+
+nextButton.addEventListener("click", () => {
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    } else {
+        startQuiz();
+    }
+});
+
 startQuiz();
